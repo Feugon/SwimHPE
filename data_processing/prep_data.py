@@ -168,21 +168,32 @@ def create_cleaned_dataset(matches, output_folder, limit_of_videos=None, mode="o
                 num_frames_to_process = num_video_frames
                 print(f"Successfully matched {num_frames_to_process} frames")
             
+            frames_saved = 0
+            frames_skipped = 0
             for frame_idx in range(num_frames_to_process):
+                # Skip frames where the swimmer is outside the frame (empty annotation)
+                annotation = frame_annotations[frame_idx]
+                if not annotation or annotation.strip() == "":
+                    frames_skipped += 1
+                    continue
+
                 frame_num = frame_idx + 1
-                
+
                 image_name = f"{img_num:04d}_{frame_num:04d}.jpg"
                 annotation_name = f"{img_num:04d}_{frame_num:04d}.txt"
-                
+
                 source_frame = frame_files[frame_idx]
                 dest_image = images_output / image_name
                 shutil.copy2(source_frame, dest_image)
-                
+
                 dest_annotation = labels_output / annotation_name
                 with open(dest_annotation, 'w') as f:
-                    f.write(frame_annotations[frame_idx])
-            
-            total_frames_processed += num_frames_to_process
+                    f.write(annotation)
+                frames_saved += 1
+
+            total_frames_processed += frames_saved
+            if frames_skipped > 0:
+                print(f"Skipped {frames_skipped} frames where swimmer is outside the frame")
             print(f"Processed {num_frames_to_process} frames from {video_file.name}")
             
             shutil.rmtree(temp_frames_dir, ignore_errors=True)

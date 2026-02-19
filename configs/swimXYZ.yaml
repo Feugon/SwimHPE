@@ -1,0 +1,13 @@
+# Dataset root directory relative to the yolov5 directory
+path: data_processing/cleaned_Freestyle_part2
+
+# Train/val/test sets: specify directories, *.txt files, or lists
+train: images/train
+val: images/val 
+test: images/test 
+
+kpt_shape: [17, 3] # number of keypoints, number of dims (2 for x,y or 3 for x,y,visible)
+
+# Classes (example using 80 COCO classes)
+names:
+    0: person

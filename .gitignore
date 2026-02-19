@@ -1,0 +1,26 @@
+# Virtual environment
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# YOLO cache files
+*.cache
+
+# Training runs
+runs/
+
+# Model weights
+models/*.pt
+models/*.mlpackage/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Notes
+Research.md

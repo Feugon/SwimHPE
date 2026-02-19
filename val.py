@@ -1,14 +1,14 @@
 from ultralytics import YOLO
 
 def val():
-    model = YOLO('yolo11n-pose.pt')  # load a pretrained model (recommended for training)
-    results = model.val(data="swimXYZ.yaml", verbose=True)
+    model = YOLO('models/yolo26m-pose.pt')  # load a pretrained model (recommended for training)
+    results = model.val(data="configs/swimXYZ.yaml", verbose=False)
 
     print(results)  # print results to console
 
 def predict():
-    model = YOLO('yolo11n-pose.pt')  # load a pretrained model (recommended for training)
-    results = model("ex.jpeg")
+    model = YOLO('models/yolo26n-pose.pt')  # load a pretrained model (recommended for training)
+    results = model.predict("examples/ex.jpeg")  
 
     for r in results:  # r is a Results object
         print(r.boxes)  # Boxes object for bbox outputs
@@ -16,4 +16,4 @@ def predict():
         print(r.masks)  # Masks object for segmentation outputs
         r.show()  # display results
 
-predict()
+val()
