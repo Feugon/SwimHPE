@@ -68,7 +68,7 @@ def convert_to_yolo(coco_annotation_file, img_width=1920, img_height=1080):
         'RElbow': 8, 'R Forearm': 8,
         'LWrist': 9, 'L Hand': 9,  
         'RWrist': 10, 'R Hand': 10,
-        'LHip': 11, 'MidHip': 11,  
+        'LHip': 11,
         'RHip': 12,
         'LKnee': 13, 'L Calf': 13,  
         'RKnee': 14, 'R Calf': 14,
