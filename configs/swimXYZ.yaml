@@ -6,7 +6,8 @@ train: images/train
 val: images/val 
 test: images/test 
 
-kpt_shape: [17, 3] # number of keypoints, number of dims (2 for x,y or 3 for x,y,visible)
+kpt_shape: [13, 3] # 13 body keypoints (face excluded, Neck included), dims: x, y, visible
+flip_idx: [1, 0, 3, 2, 5, 4, 7, 6, 9, 8, 11, 10, 12] # left↔right mirror for augmentation
 
 # Classes (example using 80 COCO classes)
 names:

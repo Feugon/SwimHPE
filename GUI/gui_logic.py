@@ -878,7 +878,7 @@ class VideoPlayer(QMainWindow):
                 keypoints = self.keypoints_cache[self.current_frame_number]
             if keypoints is None:
                 keypoints = self.model_inference.predict(self.original_frame)
-            if keypoints is None or len(keypoints) < 17:
+            if keypoints is None or len(keypoints) < 12:
                 self.show_warning_message("Inference Error", "No keypoints detected in the current frame.")
                 return
 
@@ -910,7 +910,7 @@ class VideoPlayer(QMainWindow):
             parts = [
                 0, x_center, y_center, width, height
             ]
-            for i in range(17):
+            for i in range(12):
                 x, y, conf = keypoints[i]
                 parts.extend([x / w, y / h, vis_from_conf(conf)])
 
@@ -988,7 +988,7 @@ class VideoPlayer(QMainWindow):
         def vis_from_conf(c):
             return 2 if c is not None and c > 0.5 else 1
         parts = [0, x_center, y_center, width, height]
-        for i in range(17):
+        for i in range(12):
             x, y, conf = base_keypoints[i]
             parts.extend([x / w, y / h, vis_from_conf(conf)])
         import tempfile
@@ -1033,7 +1033,7 @@ class VideoPlayer(QMainWindow):
         if Pose is not None:
             pose = Pose()
             coco_names = [
-                "Nose", "LEye", "REye", "LEar", "REar", "LShoulder", "RShoulder", "LElbow", "RElbow",
+                "LShoulder", "RShoulder", "LElbow", "RElbow",
                 "LWrist", "RWrist", "LHip", "RHip", "LKnee", "RKnee", "LAnkle", "RAnkle"
             ]
             for i, name in enumerate(coco_names):

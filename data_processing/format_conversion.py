@@ -80,7 +80,7 @@ def convert_to_yolo(coco_annotation_file, img_width=1920, img_height=1080):
             values = [float(v) for v in line.split(';') if v.strip()]
             n_vals = len(values)
 
-            yolo_keypoints = ['0.0'] * 51  # 17 keypoints × 3 = 51
+            yolo_keypoints = ['0.0'] * 39  # 13 keypoints × 3 = 39
             has_visible_keypoints = False
             normalized_keypoint_coords = {}
 
@@ -141,28 +141,25 @@ def convert_coco_json_to_swim_format(coco_json_file, output_dir, img_width=1920,
         img_width (int): Target image width for normalization (default: 1920)
         img_height (int): Target image height for normalization (default: 1080)
     """
-    # COCO to YOLO keypoint mapping (same as swim dataset)
+    # COCO body-only keypoint mapping (face KPs excluded, body re-indexed 0–11)
     coco_to_yolo_mapping = {
-        'nose': 0,
-        'left_eye': 1,
-        'right_eye': 2,
-        'left_ear': 3,
-        'right_ear': 4,
-        'left_shoulder': 5,
-        'right_shoulder': 6,
-        'left_elbow': 7,
-        'right_elbow': 8,
-        'left_wrist': 9,
-        'right_wrist': 10,
-        'left_hip': 11,
-        'right_hip': 12,
-        'left_knee': 13,
-        'right_knee': 14,
-        'left_ankle': 15,
-        'right_ankle': 16
+        'left_shoulder': 0,
+        'right_shoulder': 1,
+        'left_elbow': 2,
+        'right_elbow': 3,
+        'left_wrist': 4,
+        'right_wrist': 5,
+        'left_hip': 6,
+        'right_hip': 7,
+        'left_knee': 8,
+        'right_knee': 9,
+        'left_ankle': 10,
+        'right_ankle': 11,
     }
-    
-    # Standard COCO keypoint names in order
+
+    # All 17 standard COCO keypoint names in raw-array order (face names kept so
+    # index math into ann['keypoints'] stays correct; face KPs are skipped via the
+    # mapping dict guard below).
     coco_keypoint_names = [
         'nose', 'left_eye', 'right_eye', 'left_ear', 'right_ear',
         'left_shoulder', 'right_shoulder', 'left_elbow', 'right_elbow',
@@ -200,19 +197,21 @@ def convert_coco_json_to_swim_format(coco_json_file, output_dir, img_width=1920,
         # Process annotations for this image
         if image_id in image_annotations:
             for ann in image_annotations[image_id]:
-                if 'keypoints' in ann and len(ann['keypoints']) >= 51:  # 17 keypoints * 3 = 51
+                if 'keypoints' in ann and len(ann['keypoints']) >= 51:  # raw COCO always has 17 KPs * 3 = 51
                     keypoints = ann['keypoints']
-                    
-                    yolo_keypoints = ['0.0'] * 51  # 17 keypoints * 3 coordinates (x, y, v) = 51
+
+                    yolo_keypoints = ['0.0'] * 39  # 13 body keypoints * 3 coordinates (x, y, v) = 39
                     has_visible_keypoints = False
                     normalized_keypoint_coords = {}
                     
-                    # Process each keypoint
+                    # Process each keypoint (face KPs not in coco_to_yolo_mapping are skipped)
                     for i, keypoint_name in enumerate(coco_keypoint_names):
+                        if keypoint_name not in coco_to_yolo_mapping:
+                            continue  # skip face keypoints
                         x = keypoints[i * 3]
                         y = keypoints[i * 3 + 1]
                         v = keypoints[i * 3 + 2]  # COCO visibility: 0=not labeled, 1=labeled but not visible, 2=labeled and visible
-                        
+
                         if v > 0:  # If keypoint is labeled
                             # Scale coordinates from original image size to target size
                             scaled_x = (x / original_width) * img_width

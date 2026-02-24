@@ -12,6 +12,11 @@ __pycache__/
 # YOLO cache files
 *.cache
 
+# Dataset files
+data_processing/cleaned_Freestyle_part2/
+cleaned_Freestyle_part2/
+datasets/
+
 # Training runs
 runs/
 
@@ -24,3 +29,7 @@ models/*.mlpackage/
 
 # Notes
 Research.md
+
+# Claude Code
+CLAUDE.md
+.claude/
