@@ -5,7 +5,7 @@
 
 Project quick pointers
 - Repo goal: fine-tune a YOLO-Pose model for swimmer keypoint detection (see `CLAUDE.md`).
-- Useful code locations: `train.py`, `val.py`, `predict_visualize.py`, `webcam_demo.py`, `GUI.py`, and data utilities under `data_processing/`.
+- Useful code locations: `train.py`, `val.py`, `predict_visualize.py`, `webcam_demo.py`, `GUI.py` (experimental — do not modify unless explicitly requested), and data utilities under `data_processing/`.
 - Important dataset quirks and canonical mapping: `data_processing/keypoint_mapping.py` (7-column lower-body shift, Y-axis flip) and `data_processing/format_conversion.py`.
 
 Build / environment / run commands
@@ -124,6 +124,8 @@ Safety and change policy for agents
 - Non-destructive first: prefer edits that add tests, docs, or small refactors.
 - For breaking or large changes: open a draft PR and request human review.
 - Never commit secrets (API keys, credentials). If you find secrets, stop and notify the human operator.
+
+- GUI experimental policy: the GUI is an experimental feature. Agents MUST NOT modify or add changes under the `GUI/` folder or `GUI.py` unless the user explicitly asks for GUI work. Treat any GUI-related edits as optional, potentially fragile, and requiring human approval before committing.
 
 Next steps agents may take (suggestions)
 1. Add `pyproject.toml` with `black`, `isort`, and `mypy` config (if CI expects it).
