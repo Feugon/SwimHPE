@@ -1,5 +1,5 @@
 """
-Canonical keypoint mapping for SwimXYZ → 13-body-keypoint → YOLO conversion.
+Canonical keypoint mapping for SwimXYZ body25 → 13-body-keypoint → YOLO conversion.
 
 Face keypoints (Nose, LEye, REye, LEar, REar) are excluded — they are not visible
 or useful in swimming footage.  The model uses 13 body keypoints:
@@ -7,30 +7,22 @@ or useful in swimming footage.  The model uses 13 body keypoints:
   LWrist(4), RWrist(5), LHip(6), RHip(7),
   LKnee(8), RKnee(9), LAnkle(10), RAnkle(11), Neck(12)
 
-## SwimXYZ Column Shift
+## body25 vs COCO Annotation Files
 
-Raw SwimXYZ annotation files contain a 7-column cyclic shift in the lower-body
-joint headers: the column *names* do not match the data actually stored in those
-columns.  Additionally, the `LAnkle` column holds LEar (a face keypoint, now ignored).
+SwimXYZ ships two annotation formats under each clip:
+  body25/2D_cam.txt  — 25 keypoints × 3 values = 75 columns, ALL correct labels
+  COCO/2D_cam.txt    — same 75-column header but only 54 data values; contains a
+                        7-column cyclic shift in lower-body headers that was verified
+                        by visual inspection in keypoint_label_debug.ipynb
 
-Discovery: `keypoint_label_debug.ipynb` plotted raw column names as labeled dots on
-actual video frames, revealing that "LAnkle" landed on the ear and "MidHip" landed
-at the right hip.  A three-panel comparison (RAW vs two correction hypotheses) showed
-that only the 7-column shift produced anatomically correct labels.
+**This pipeline uses body25 files.** Body25 column names match their data exactly —
+no correction is needed. The shift documented in keypoint_label_debug.ipynb applies
+only to COCO/2D_cam.txt files and is NOT relevant here.
 
-Verification: `check_knee_ankle_order()` in `keypoint_label_debug.ipynb` confirmed
-0 swapped frames across all three side-view cameras after applying this correction.
+Body25 index 8, "MidHip", is the genuine pelvis midpoint (not RHip data). It is not
+part of our 13-KP model and is simply omitted from the mapping below.
 
-Column shift summary:
-  LAnkle col → LEar (face — ignored)
-  RAnkle col → LHip
-  MidHip col → RHip   ← "MidHip" is not a real joint; the column holds RHip data
-  LHip   col → LKnee
-  RHip   col → RKnee
-  LKnee  col → LAnkle
-  RKnee  col → RAnkle
-
-`Neck` appears in the raw file and is included as a target keypoint (index 12).
+`Neck` (body25 index 1) is present and included as target keypoint index 12.
 """
 
 # 13 body keypoint names in canonical YOLO slot order (index = slot)
@@ -55,10 +47,10 @@ COCO_KP_INDEX = {name: i for i, name in enumerate(COCO_KP_NAMES)}
 
 # SwimXYZ raw column name → true body keypoint name.
 # Includes alternative spellings found across different video batches.
-# Face-related columns (Nose, LEye, REye, REar, and the shifted LAnkle→LEar) are
-# omitted so SWIMXYZ_COL_TO_YOLO_IDX (derived below) silently ignores them.
+# Face-related columns and MidHip (pelvis midpoint) are omitted so
+# SWIMXYZ_COL_TO_YOLO_IDX (derived below) silently ignores them.
 SWIMXYZ_TO_COCO_NAME = {
-    # Upper body — column names match their actual data
+    # Upper body — column names match their actual data (same in body25 and COCO)
     'LShoulder':    'LShoulder',
     'L Clavicle':   'LShoulder',
     'RShoulder':    'RShoulder',
@@ -71,16 +63,17 @@ SWIMXYZ_TO_COCO_NAME = {
     'L Hand':       'LWrist',
     'RWrist':       'RWrist',
     'R Hand':       'RWrist',
-    # Neck — column name matches actual data
+    # Neck — body25 index 1; column name matches data
     'Neck':         'Neck',
-    # Lower-body cyclic shift — column names do NOT match their actual data
-    # LAnkle col holds LEar (face) — excluded
-    'RAnkle':       'LHip',    # RAnkle column holds LHip coordinates
-    'MidHip':       'RHip',    # MidHip column holds RHip coordinates
-    'LHip':         'LKnee',   # LHip   column holds LKnee coordinates
-    'RHip':         'RKnee',   # RHip   column holds RKnee coordinates
-    'LKnee':        'LAnkle',  # LKnee  column holds LAnkle coordinates
-    'RKnee':        'RAnkle',  # RKnee  column holds RAnkle coordinates
+    # Lower body — body25 column names match their actual data (no shift)
+    'RHip':         'RHip',
+    'LHip':         'LHip',
+    'RKnee':        'RKnee',
+    'LKnee':        'LKnee',
+    'RAnkle':       'RAnkle',
+    'LAnkle':       'LAnkle',
+    # MidHip (body25 pelvis midpoint) — omitted; not in our 13-KP model
+    # Face keypoints — omitted; not in our 13-KP model
 }
 
 # Derived convenience dict: raw SwimXYZ column name → YOLO slot index.
