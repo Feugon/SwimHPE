@@ -1,0 +1,125 @@
+{
+  "version": "v4.0.0-beta.1",
+  "flags": {},
+  "shapes": [
+    {
+      "kie_linking": [],
+      "label": "person",
+      "score": null,
+      "points": [
+        [
+          225.24423189252337,
+          152.32951226635515
+        ],
+        [
+          588.9653913551402,
+          152.32951226635515
+        ],
+        [
+          588.9653913551402,
+          251.01891063084116
+        ],
+        [
+          225.24423189252337,
+          251.01891063084116
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "rectangle",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "nose",
+      "score": null,
+      "points": [
+        [
+          369.8539719626168,
+          193.96393107476638
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_elbow",
+      "score": null,
+      "points": [
+        [
+          320.2117406542056,
+          213.83834696261684
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_wrist",
+      "score": null,
+      "points": [
+        [
+          248.72006425233647,
+          217.65880549065423
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_hip",
+      "score": null,
+      "points": [
+        [
+          465.2759929906542,
+          233.68538259345797
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_hip",
+      "score": null,
+      "points": [
+        [
+          481.9359667056075,
+          176.90238025700936
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    }
+  ],
+  "imagePath": "frame_0001.jpg",
+  "imageData": null,
+  "imageHeight": 360,
+  "imageWidth": 640,
+  "description": ""
+}

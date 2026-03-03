@@ -1,0 +1,227 @@
+{
+  "version": "v4.0.0-beta.1",
+  "flags": {},
+  "shapes": [
+    {
+      "kie_linking": [],
+      "label": "person",
+      "score": 0.5556716322898865,
+      "points": [
+        [
+          148.81881713867188,
+          106.94955444335938
+        ],
+        [
+          352.07666015625,
+          106.94955444335938
+        ],
+        [
+          352.07666015625,
+          182.14154052734375
+        ],
+        [
+          148.81881713867188,
+          182.14154052734375
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "rectangle",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_shoulder",
+      "score": 0.9146026372909546,
+      "points": [
+        [
+          321.5274477186312,
+          147.27513070342204
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_shoulder",
+      "score": 0.9726696014404297,
+      "points": [
+        [
+          305.95591730038024,
+          169.0892347908745
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_elbow",
+      "score": 0.5927764177322388,
+      "points": [
+        [
+          306.88420865019015,
+          137.13670389733838
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_elbow",
+      "score": 0.8702468872070312,
+      "points": [
+        [
+          273.71970057034224,
+          158.59731463878325
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_wrist",
+      "score": 0.8583495020866394,
+      "points": [
+        [
+          257.8184410646388,
+          173.81089591254752
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_hip",
+      "score": 0.961977481842041,
+      "points": [
+        [
+          268.0,
+          134.0
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_hip",
+      "score": 0.9818190336227417,
+      "points": [
+        [
+          258.86406844106466,
+          147.77120960076044
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_knee",
+      "score": 0.9382269978523254,
+      "points": [
+        [
+          224.1860741444867,
+          127.9414211026616
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_knee",
+      "score": 0.9815381765365601,
+      "points": [
+        [
+          214.0,
+          142.0
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_ankle",
+      "score": 0.9335281848907471,
+      "points": [
+        [
+          183.57295627376428,
+          114.64086264258556
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_ankle",
+      "score": 0.9783539772033691,
+      "points": [
+        [
+          174.45045152091257,
+          121.0869177756654
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    }
+  ],
+  "imagePath": "frame_0059.jpg",
+  "imageData": null,
+  "imageHeight": 360,
+  "imageWidth": 640,
+  "description": ""
+}

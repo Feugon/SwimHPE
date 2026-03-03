@@ -1,0 +1,210 @@
+{
+  "version": "v4.0.0-beta.1",
+  "flags": {},
+  "shapes": [
+    {
+      "kie_linking": [],
+      "label": "person",
+      "score": 0.8035826683044434,
+      "points": [
+        [
+          132.99319458007812,
+          121.0885009765625
+        ],
+        [
+          458.666015625,
+          121.0885009765625
+        ],
+        [
+          458.666015625,
+          242.233154296875
+        ],
+        [
+          132.99319458007812,
+          242.233154296875
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "rectangle",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_shoulder",
+      "score": 0.9438903331756592,
+      "points": [
+        [
+          327.52314814814815,
+          151.337287808642
+        ]
+      ],
+      "group_id": 0,
+      "description": "",
+      "difficult": true,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_shoulder",
+      "score": 0.9928172826766968,
+      "points": [
+        [
+          332.07561728395063,
+          183.39506172839506
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_elbow",
+      "score": 0.9826834797859192,
+      "points": [
+        [
+          396.0,
+          167.0
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_wrist",
+      "score": 0.9431164860725403,
+      "points": [
+        [
+          429.0,
+          143.0
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_hip",
+      "score": 0.9820952415466309,
+      "points": [
+        [
+          259.43865740740745,
+          181.83979552469137
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_hip",
+      "score": 0.9903697967529297,
+      "points": [
+        [
+          267.63937114197535,
+          214.5293209876543
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_knee",
+      "score": 0.9791654348373413,
+      "points": [
+        [
+          196.17669753086423,
+          198.07484567901233
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_knee",
+      "score": 0.9800761938095093,
+      "points": [
+        [
+          199.46325231481484,
+          231.26109182098767
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "left_ankle",
+      "score": 0.7917327880859375,
+      "points": [
+        [
+          142.1257716049383,
+          198.2098765432099
+        ]
+      ],
+      "group_id": 0,
+      "description": null,
+      "difficult": false,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    },
+    {
+      "kie_linking": [],
+      "label": "right_ankle",
+      "score": 0.8401089310646057,
+      "points": [
+        [
+          155.54205246913585,
+          200.50298996913583
+        ]
+      ],
+      "group_id": 0,
+      "description": "",
+      "difficult": true,
+      "shape_type": "point",
+      "flags": {},
+      "attributes": {}
+    }
+  ],
+  "imagePath": "frame_0034.jpg",
+  "imageData": null,
+  "imageHeight": 360,
+  "imageWidth": 640,
+  "description": ""
+}
