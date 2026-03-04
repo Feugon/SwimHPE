@@ -26,6 +26,19 @@ KEYPOINT_VISIBLE     = 2.0   # in-bounds and not occluded
 KEYPOINT_NOT_VISIBLE = 1.0   # outside image bounds
 KEYPOINT_OCCLUDED    = 0.0   # in-bounds but hidden (water or self-occlusion)
 
+# X-AnyLabeling label → COCO17 keypoint index
+XANY_TO_COCO17_IDX = {
+    'nose': 0,
+    'left_eye': 1,      'right_eye': 2,
+    'left_ear': 3,      'right_ear': 4,
+    'left_shoulder': 5, 'right_shoulder': 6,
+    'left_elbow': 7,    'right_elbow': 8,
+    'left_wrist': 9,    'right_wrist': 10,
+    'left_hip': 11,     'right_hip': 12,
+    'left_knee': 13,    'right_knee': 14,
+    'left_ankle': 15,   'right_ankle': 16,
+}
+
 
 def calculate_bounding_box(keypoint_coords, padding=80, img_width=1920, img_height=1080):
     """
@@ -88,9 +101,9 @@ def convert_frame(
         camera_view:       Normalized view name from occlusion.detect_view_from_path(),
                            e.g. 'water_level', 'underwater', 'above_water', or None
                            for bounds-only visibility.
-        min_visible_ratio: Minimum fraction of 13 keypoints that must be inside the
+        min_visible_ratio: Minimum fraction of body keypoints that must be inside the
                            image bounds to keep the frame.  Set to 0.5 to require
-                           at least 7 in-bounds joints.
+                           at least half of the in-frame body joints.
 
     Returns:
         YOLO annotation string, or None if the frame should be skipped.
@@ -149,13 +162,20 @@ def convert_frame(
     # --- Build YOLO keypoints array and normalized coordinates dict ---
     n_kp = len(COCO_KP_NAMES)
     yolo_keypoints = ['0.0'] * (n_kp * 3)
+
+    # Face keypoints (slots 0-4: Nose, LEye, REye, LEar, REar) are absent from
+    # SwimXYZ body25 annotations.  Use v=0 (not labeled) so the trainer ignores
+    # them in OKS loss entirely — v=1 at (0,0) would corrupt training.
+    for i in range(5):
+        yolo_keypoints[i * 3 + 2] = f"{KEYPOINT_OCCLUDED:.6f}"
+
     normalized_keypoint_coords: dict[str, dict] = {}
     has_in_bounds = False
 
     for true_name, (x, y_img) in true_name_to_pixel.items():
         yolo_idx     = COCO_KP_INDEX[true_name]
-        normalized_x = round(x      / img_width,  6)
-        normalized_y = round(y_img  / img_height, 6)
+        normalized_x = round(max(0.0, min(1.0, x     / img_width)),  6)
+        normalized_y = round(max(0.0, min(1.0, y_img / img_height)), 6)
         visibility   = vis_map.get(true_name, KEYPOINT_NOT_VISIBLE)
 
         normalized_keypoint_coords[true_name] = {
@@ -465,6 +485,95 @@ def filter_coco_images_and_labels(coco_images_dir, coco_labels_dir):
     filtered_labels = [label for label in coco_labels if label.stem in label_filenames]
 
     return filtered_images, filtered_labels
+
+
+def convert_xanylabeling_to_yolo(json_dir, output_dir, img_width=640, img_height=360):
+    """
+    Convert X-AnyLabeling JSON annotations to YOLO pose format (COCO17, 17 keypoints).
+
+    Reads per-frame JSON files exported from X-AnyLabeling v4.x and writes matching
+    YOLO .txt label files.  One output file per input JSON, same stem.
+
+    Visibility mapping:
+        annotated + difficult=False → 2.0 (visible)
+        annotated + difficult=True  → 1.0 (labeled but uncertain)
+        not annotated               → 0.0 (missing)
+
+    Bounding box: uses the annotated 'person' rectangle when present; otherwise
+    computes it from visible keypoints via calculate_bounding_box().
+
+    Args:
+        json_dir:   Directory containing frame_NNNN.json (+ frame_NNNN.jpg) files.
+        output_dir: Directory to write YOLO .txt label files.
+        img_width:  Image width in pixels (default: 640).
+        img_height: Image height in pixels (default: 360).
+    """
+    json_dir   = Path(json_dir)
+    output_dir = Path(output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    json_files = sorted(json_dir.glob("*.json"))
+    if not json_files:
+        print(f"No JSON files found in {json_dir}")
+        return
+
+    written = skipped = 0
+    for json_path in json_files:
+        with open(json_path) as f:
+            data = json.load(f)
+
+        # Initialize 17 slots as [x_norm, y_norm, vis]
+        kps = [[0.0, 0.0, 0.0] for _ in range(17)]
+        bbox_pixels = None
+
+        for shape in data.get("shapes", []):
+            label      = shape.get("label", "").lower()
+            shape_type = shape.get("shape_type", "")
+            points     = shape.get("points", [])
+            difficult  = shape.get("difficult", False)
+
+            if shape_type == "rectangle" and label == "person" and len(points) == 4:
+                xs = [p[0] for p in points]
+                ys = [p[1] for p in points]
+                bbox_pixels = (min(xs), min(ys), max(xs), max(ys))
+
+            elif shape_type == "point" and label in XANY_TO_COCO17_IDX and points:
+                idx     = XANY_TO_COCO17_IDX[label]
+                x, y    = points[0]
+                vis     = KEYPOINT_NOT_VISIBLE if difficult else KEYPOINT_VISIBLE
+                kps[idx] = [round(x / img_width, 6), round(y / img_height, 6), vis]
+
+        # Skip frames with no annotated keypoints
+        if all(k[2] == 0.0 for k in kps):
+            skipped += 1
+            continue
+
+        # Bounding box: use annotated rectangle when available
+        if bbox_pixels is not None:
+            x1, y1, x2, y2 = bbox_pixels
+            x_center = round(((x1 + x2) / 2) / img_width,  6)
+            y_center = round(((y1 + y2) / 2) / img_height, 6)
+            width    = round((x2 - x1)        / img_width,  6)
+            height   = round((y2 - y1)        / img_height, 6)
+        else:
+            kp_coords = {
+                str(i): {'x': k[0], 'y': k[1], 'v': k[2]}
+                for i, k in enumerate(kps) if k[2] > 0.0
+            }
+            bbox = calculate_bounding_box(
+                kp_coords, padding=20, img_width=img_width, img_height=img_height
+            )
+            if bbox is None:
+                skipped += 1
+                continue
+            x_center, y_center, width, height = bbox
+
+        kp_str = " ".join(f"{k[0]:.6f} {k[1]:.6f} {k[2]:.6f}" for k in kps)
+        line   = f"0 {x_center:.6f} {y_center:.6f} {width:.6f} {height:.6f} {kp_str}"
+        (output_dir / (json_path.stem + ".txt")).write_text(line + "\n")
+        written += 1
+
+    print(f"Converted {written} frames, skipped {skipped} (no keypoints)  →  {output_dir}")
 
 
 if __name__ == "__main__":
