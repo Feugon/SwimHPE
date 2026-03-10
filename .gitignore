@@ -23,6 +23,9 @@ dataset/
 # Raw unlabeled footage (YouTube frames + annotations)
 unlabeled_data/
 
+# Hand-labeled frames (copyrighted YouTube footage — reconstruct via data_processing/reconstruct_dataset.py)
+labeled_data/
+
 # Loose unprocessed data at project root
 25m_underwater*/
 2_beat_kick*/
