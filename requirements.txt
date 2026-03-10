@@ -1,8 +1,9 @@
-ultralytics
-opencv-python
-numpy
-torch
-pillow
-PyQt6
-matplotlib
-scipy
+ultralytics>=8.0
+opencv-python>=4.8
+numpy>=1.24
+torch>=2.0
+pillow>=10.0
+PyQt6>=6.5
+matplotlib>=3.7
+scipy>=1.11
+yt-dlp>=2024.1

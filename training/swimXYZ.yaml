@@ -1,0 +1,14 @@
+# Dataset root directory relative to the yolov5 directory
+path: dataset/synthetic
+
+# Train/val/test sets: specify directories, *.txt files, or lists
+train: images/train
+val: images/val 
+test: images/test 
+
+kpt_shape: [17, 3] # 17 COCO keypoints, dims: x, y, visible
+flip_idx: [0, 2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11, 14, 13, 16, 15] # left↔right mirror for augmentation
+
+# Classes (example using 80 COCO classes)
+names:
+    0: person

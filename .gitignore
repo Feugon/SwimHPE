@@ -7,29 +7,47 @@ __pycache__/
 *.pyo
 
 # macOS
-.DS_Store
+**/.DS_Store
 
 # YOLO cache files
 *.cache
 
-# Dataset files
-data_processing/cleaned_Freestyle_part2/
-cleaned_Freestyle_part2/
-datasets/
-
-# Training runs
-runs/
-
-# Model weights
-models/*.pt
+# Model weights (large binaries; download separately or train locally)
+*.pt
+*.onnx
 models/*.mlpackage/
+
+# Generated / mixed datasets (rebuild with data_processing scripts)
+dataset/
+
+# Raw unlabeled footage (YouTube frames + annotations)
+unlabeled_data/
+
+# Loose unprocessed data at project root
+25m_underwater*/
+2_beat_kick*/
+
+# Test output artifacts
+test_output/
+
+# Scratch / experimental work
+scratch/
+
+# Training run artifacts
+runs/
 
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
-# Notes
+# Notes / local docs
 Research.md
 
 # Claude Code
 CLAUDE.md
 .claude/
+
+# Old cleaned dataset (legacy)
+data_processing/cleaned_Freestyle_part2/
+cleaned_Freestyle_part2/
+
+examples/
