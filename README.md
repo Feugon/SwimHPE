@@ -1,4 +1,6 @@
 # SwimHPE Write-Up
+<img width="501" height="570" alt="Screenshot 2026-03-10 at 5 04 19 PM" src="https://github.com/user-attachments/assets/b52a5222-6c6e-47f4-b5a5-8f505570eee8" />
+
 
 ## Project Overview
 In this project, I attempt to create a model that is capable of human pose estimation on swimming footage in real time. Such models could be used to detect key statistics about a swimmer like their stroke rate, speed, and angles of their joints, which could aid them in improving their techniques. 
@@ -25,24 +27,24 @@ As I quickly realized, training on purely synthetic data was not going to be eno
 
 After the frames were created, I used [X-AnyLabeling](https://github.com/CVHub520/X-AnyLabeling) to manually label them. I did not label any facial features, they were often too occluded and weren't of interest for any downstream tasks for the model. The software was really nice to use and while I did have some complaints I will not list them here because it was probably due to my lack of experience with using it. It took me about 5 hours to find and label the frames.
 
-**Important:** Some of the annotations are not of the highest quality or are outright poor. I didn't know how to handle labeling multiple swimmers in the frame at first. Also I was much too liberal with not marking points because of occlusions when I first started to label points.
+**Important:** Some of the annotations are not of the highest quality or are outright poor. I didn't know how to handle labeling multiple swimmers in the frame at first. Also I was much too liberal with not marking points because of occlusions when I first started to label points. The dataset is not stored directly in the repo, instead we have a JSON of annotations and a script called `reconstruct_dataset.py` that gets the relevant images and labels for you. Feel free to use this however you please. 
 
 Here are the YT videos I used to gather the frames from:
-https://www.youtube.com/watch?v=omhYbRTOQEk
-https://www.youtube.com/watch?v=HNav_fzh0vI
-https://www.youtube.com/watch?v=3gjWQW2ubpA
-https://www.youtube.com/watch?v=gSISVaMTe1o
-https://www.youtube.com/watch?v=fqPwtPwdcnM&pp=ygUTc3dpbW1pbmcgYnJlYXN0cm9rZQ%3D%3D
-https://www.youtube.com/watch?v=ss7KyDcHrvI&pp=ygUTc3dpbW1pbmcgYnJlYXN0cm9rZQ%3D%3D
-https://www.youtube.com/watch?v=nrdDanWxQQY&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmE%3D
-https://www.youtube.com/watch?v=3gimynmehxA&pp=ygUUdW5kZXJ3YXRlciBmcmVlc3R5bGU%3D
-https://www.youtube.com/watch?v=bpuSkY-WwYk&pp=ygUUdW5kZXJ3YXRlciBmcmVlc3R5bGU%3D
-https://www.youtube.com/watch?v=m3BsRGK9RSQ&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmE%3D
-https://www.youtube.com/watch?v=wLLbvett15o&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmE%3D
-https://www.youtube.com/watch?v=ljGppH9qgBA&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmHSBwkJrgoBhyohjO8%3D
-https://www.youtube.com/watch?v=_SjuNR8W3Zc&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmHSBwkJrgoBhyohjO8%3D
-https://www.youtube.com/watch?v=7UqIlG1sMNs&pp=ygUac3dpbW1pbmcgdW5kZXJ3YXRlciBjYW1lcmE%3D
-https://www.youtube.com/watch?v=9F_qz4FZZXk&pp=ygUTc3dpbW1pbmcgc3RyZWFtbGluZQ%3D%3D
+[1](https://www.youtube.com/watch?v=omhYbRTOQEk)
+[2](https://www.youtube.com/watch?v=HNav_fzh0vI)
+[3](https://www.youtube.com/watch?v=3gjWQW2ubpA)
+[4](https://www.youtube.com/watch?v=gSISVaMTe1o)
+[5](https://www.youtube.com/watch?v=fqPwtPwdcnM)
+[6](https://www.youtube.com/watch?v=ss7KyDcHrvI)
+[7](https://www.youtube.com/watch?v=nrdDanWxQQY)
+[8](https://www.youtube.com/watch?v=3gimynmehxA)
+[9](https://www.youtube.com/watch?v=bpuSkY-WwYk)
+[10](https://www.youtube.com/watch?v=m3BsRGK9RSQ)
+[11](https://www.youtube.com/watch?v=wLLbvett15o)
+[12](https://www.youtube.com/watch?v=ljGppH9qgBA)
+[13](https://www.youtube.com/watch?v=_SjuNR8W3Zc)
+[14](https://www.youtube.com/watch?v=7UqIlG1sMNs)
+[15](https://www.youtube.com/watch?v=9F_qz4FZZXk)
 
 
 ## Training The Model
@@ -79,7 +81,18 @@ After finetuning the nano YoloPose model for about 200 epochs (it automatically 
 
 And while the measurements are pretty good, I actually think the model is much more capable than the numbers suggest. My validation set is rather small (I didn't want to lose any more data for training) and a qualitative comparison of the models is actually more telling.
 
-<Insert footage here>
+### Finetuned Model 
+
+
+https://github.com/user-attachments/assets/0bd0f7b1-a15c-4823-abbc-28a22c3184c5
+
+### Largest base YoloPose Model 
+
+
+
+https://github.com/user-attachments/assets/4447c518-8ddc-493d-86b4-f4760010ee65
+
+As we can see the performance is very similar despite the latter being almost 20x as big. The respective FPS were 25 and 1. 
 
 Additionally I added a simple test time augmentation (TTA) which runs inference on a horizontally flipped version of the image and averages out the predictions. It slows down by a little over 2x but does create much more stable predictions and helps the recall of the model significantly (reducing the empty guesses).
 
