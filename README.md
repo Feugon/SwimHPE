@@ -81,6 +81,12 @@ After finetuning the nano YoloPose model for about 200 epochs (it automatically 
 
 And while the measurements are pretty good, I actually think the model is much more capable than the numbers suggest. My validation set is rather small (I didn't want to lose any more data for training) and a qualitative comparison of the models is actually more telling.
 
+### Base Nano Model 
+
+
+https://github.com/user-attachments/assets/1c1b2b45-0b5a-4a89-8271-7968e781e5ec
+
+
 ### Finetuned Model 
 
 
